@@ -52,11 +52,11 @@ public class Pigeon extends Circle implements Runnable {
 		Food f = null;
 
 		if (foods.size() > 0) {
-			Double distance = calculateDistance(foods.get(0).getPoint());
-			f = foods.get(0);
+			Double distance = Double.MAX_VALUE;
 
-			for (int i = 1; i < foods.size(); i++) {
+			for (int i = 0; i < foods.size(); i++) {
 				if (calculateDistance(foods.get(i).getPoint()) < distance) {
+					distance = calculateDistance(foods.get(i).getPoint());
 					f = foods.get(i);
 				}
 			}
