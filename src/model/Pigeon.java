@@ -7,19 +7,17 @@ import controller.Square;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class Pigeon implements Runnable {
+public class Pigeon extends Circle implements Runnable {
 
-	private Point point;
 	private boolean isAlive;
-	private Color color;
 	private Square square;
-	private Circle circle;
+	private String name;
 
-	public Pigeon(int x, int y, Color color, Square square) {
-		this.point = new Point(x, y);
+	public Pigeon(int x, int y, Color color, Square square, String name) {
+		super(x, y, 10, color);
 		this.isAlive = true;
-		this.color = color;
 		this.square = square;
+		this.name = name;
 	}
 
 	@Override
@@ -39,7 +37,7 @@ public class Pigeon implements Runnable {
 		}
 	}
 
-	private void goToFood() {
+	private synchronized void goToFood() {
 		List<Food> foods = square.getFoodList();
 		Food f = findFood(foods);
 
@@ -66,16 +64,16 @@ public class Pigeon implements Runnable {
 	}
 
 	private Double calculateDistance(Point p1) {
-		Double sumX = Math.pow(p1.x - point.x, 2);
-		Double sumY = Math.pow(p1.y - point.y, 2);
+		Double sumX = Math.pow(p1.x - this.getCenterX(), 2);
+		Double sumY = Math.pow(p1.y - this.getCenterY(), 2);
 
 		return Math.sqrt(sumX + sumY);
 	}
 
 	private void moveTo(Food f) {
-		if (point.x == f.getPoint().x && point.y == f.getPoint().y) {
+		if (this.getCenterX() == f.getPoint().x && this.getCenterY() == f.getPoint().y) {
 			if (f.isFresh()) {
-				System.out.println("The " + this.color.toString() + " pigeon is eating!");
+				System.out.println("The " + this.name + " pigeon is eating!");
 				this.square.removeFood(f);
 			} else {
 				// The food is rotten
@@ -83,36 +81,17 @@ public class Pigeon implements Runnable {
 				System.out.println("The pigeon doesn't like this food");
 			}
 		} else {
-			if (point.x < f.getPoint().x)
-				point.x++;
+			if (this.getCenterX() < f.getPoint().x)
+				this.setCenterX(this.getCenterX() + 1);
 
-			if (point.x > f.getPoint().x)
-				point.x--;
+			if (this.getCenterX() > f.getPoint().x)
+				this.setCenterX(this.getCenterX() - 1);
 
-			if (point.y < f.getPoint().y)
-				point.y++;
+			if (this.getCenterY() < f.getPoint().y)
+				this.setCenterY(this.getCenterY() + 1);
 
-			if (point.y > f.getPoint().y)
-				point.y--;
+			if (this.getCenterY() > f.getPoint().y)
+				this.setCenterY(this.getCenterY() - 1);
 		}
-
-		update();
-	}
-
-	public Point getPoint() {
-		return this.point;
-	}
-
-	public Color getColor() {
-		return this.color;
-	}
-
-	public void setCircle(Circle circle) {
-		this.circle = circle;
-	}
-
-	private void update() {
-		this.circle.setCenterX(this.point.x);
-		this.circle.setCenterY(this.point.y);
 	}
 }

@@ -9,8 +9,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import model.Food;
 import model.Pigeon;
 
@@ -33,17 +31,11 @@ public class Square implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		// Initialize the frame
-		addPigeon(new Pigeon(100, 250, Color.BLUEVIOLET, this));
-		addPigeon(new Pigeon(400, 100, Color.BEIGE, this));
-		addPigeon(new Pigeon(90, 400, Color.DARKSEAGREEN, this));
+		addPigeon(new Pigeon(100, 250, Color.BLUEVIOLET, this, "blueviolet"));
+		addPigeon(new Pigeon(400, 100, Color.BEIGE, this, "beige"));
+		addPigeon(new Pigeon(90, 400, Color.DARKSEAGREEN, this, "darkseagreen"));
 
 		for (Pigeon pigeon : pigeonList) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
 			new Thread(pigeon).start();
 		}
 		// anchorPane.getChildren().addAll(circle);
@@ -56,18 +48,13 @@ public class Square implements Initializable {
 	}
 
 	public void addPigeon(Pigeon p) {
-		Circle circle = new Circle(p.getPoint().x, p.getPoint().y, 10, p.getColor());
-		p.setCircle(circle);
-		anchorPane.getChildren().add(circle);
-
+		anchorPane.getChildren().add(p);
 		this.pigeonList.add(p);
 
 	}
 
 	public void addFood(Food f) {
-		Rectangle rectangle = new Rectangle(f.getPoint().x, f.getPoint().y, 10, 10);
-		anchorPane.getChildren().add(rectangle);
-
+		anchorPane.getChildren().add(f);
 		this.foodList.add(f);
 	}
 
