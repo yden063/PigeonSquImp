@@ -3,6 +3,7 @@ package model;
 import java.awt.Point;
 import java.util.List;
 
+import controller.Square;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
@@ -11,7 +12,7 @@ public class Pigeon implements Runnable {
 	private Point point;
 	private boolean isAlive;
 	private Color color;
-	private Object square;
+	private Square square;
 
 	public Pigeon(int x, int y, Color color) {
 		this.point = new Point(x, y);
