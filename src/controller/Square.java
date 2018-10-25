@@ -20,12 +20,14 @@ public class Square implements Initializable {
 	private Circle circle;
     private List<Pigeon> pigeonList;
     private List<Food> foodList;
+    private List<Food> rottenFoodList;
 
 
     public Square(){
 
         this.pigeonList = new ArrayList<>();
         this.foodList = new ArrayList<>();
+        this.rottenFoodList = new ArrayList<>();
     }
 
 	@Override
@@ -59,7 +61,13 @@ public class Square implements Initializable {
         this.foodList.add(f);
     }
 
+    public  void  addRottenFood(Food f){
+
+        this.rottenFoodList.add(f);
+    }
+
     public void removeFood(Food f) {
+
 
         this.foodList.remove(f);
     }
@@ -77,5 +85,12 @@ public class Square implements Initializable {
 			
 		});
 	}
+
+	public  void removeRottenFood(Food f){
+
+        this.addRottenFood(f);
+        this.foodList.remove(f);
+
+    }
 	
 }
