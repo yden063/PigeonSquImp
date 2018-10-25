@@ -13,12 +13,15 @@ public class Pigeon extends Circle implements Runnable {
 	private boolean isAlive;
 	private Square square;
 	private String name;
+	private boolean affraid;
+	private int randomX, randomY;
 
 	public Pigeon(int x, int y, Color color, Square square, String name) {
 		super(x, y, 10, color);
 		this.isAlive = true;
 		this.square = square;
 		this.name = name;
+		this.affraid = false;
 	}
 
 	@Override
@@ -29,10 +32,18 @@ public class Pigeon extends Circle implements Runnable {
 	}
 
 	private void live() {
-		goToFood();
+		if (!affraid)
+			goToFood();
+		else {
+
+			move(randomX, randomY);
+		}
 
 		try {
-			Thread.sleep(30);
+			if(affraid)
+				Thread.sleep(8);
+			else
+				Thread.sleep(30);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -86,16 +97,47 @@ public class Pigeon extends Circle implements Runnable {
 			} else {
 				if (this.getCenterX() < f.getPoint().x)
 					this.setCenterX(this.getCenterX() + 1);
-				
+
 				if (this.getCenterX() > f.getPoint().x)
 					this.setCenterX(this.getCenterX() - 1);
-				
+
 				if (this.getCenterY() < f.getPoint().y)
 					this.setCenterY(this.getCenterY() + 1);
-				
+
 				if (this.getCenterY() > f.getPoint().y)
+					this.setCenterY(this.getCenterY() - 1);
+
+			}
+		});
+	}
+
+	private void move(double x, double y) {
+		// Move to the coordinates
+		Platform.runLater(() -> {
+			if (this.getCenterX() == x && this.getCenterY() == y) {
+				this.affraid = false;
+			} else {
+				if (this.getCenterX() < x)
+					this.setCenterX(this.getCenterX() + 1);
+
+				if (this.getCenterX() > x)
+					this.setCenterX(this.getCenterX() - 1);
+
+				if (this.getCenterY() < y)
+					this.setCenterY(this.getCenterY() + 1);
+
+				if (this.getCenterY() > y)
 					this.setCenterY(this.getCenterY() - 1);
 			}
 		});
 	}
+
+	public void setAffraid(int randomX, int randomY) {
+		this.affraid = true;
+
+		this.randomX = randomX;
+		this.randomY = randomY;
+
+	}
+
 }

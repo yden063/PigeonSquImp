@@ -3,11 +3,13 @@ package controller;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import model.Food;
@@ -39,7 +41,6 @@ public class Square implements Initializable {
 			new Thread(pigeon).start();
 		}
 		// anchorPane.getChildren().addAll(circle);
-		
 
 		handleSetOnMouseClicked();
 	}
@@ -59,7 +60,7 @@ public class Square implements Initializable {
 		// f.notify();
 		Platform.runLater(() -> {
 			anchorPane.getChildren().remove(f);
-			this.foodList.remove(f);	
+			this.foodList.remove(f);
 		});
 	}
 
@@ -78,20 +79,47 @@ public class Square implements Initializable {
 
 	private void handleSetOnMouseClicked() {
 		anchorPane.setOnMouseClicked(e -> {
-			Double dx = e.getSceneX();
-			Double dy = e.getSceneY();
 
-			Food food = new Food(dx.intValue(), dy.intValue());
-			addFood(food);
+			if (e.getButton() == MouseButton.SECONDARY) {
+				System.out.println("right click");
+				handleRightClick();
+			} else {
+				System.out.println("primary click");
+				Double dx = e.getSceneX();
+				Double dy = e.getSceneY();
 
-			//new Thread(food).start();
+				Food food = new Food(dx.intValue(), dy.intValue());
+				addFood(food);
+			}
+
+			// new Thread(food).start();
 		});
 	}
 
-	public void removeRottenFood(Food f) {
+	private void handleRightClick() {
+		// Disperse the pigeons
+		
+		for (Pigeon pigeon : pigeonList) {
+			int randomX = getRandomNumber((int) this.anchorPane.getWidth() - 10);
+			int randomY = getRandomNumber((int) this.getAnchorPane().getHeight() - 10);
+			pigeon.setAffraid(randomX, randomY);
+		}
+		
+	}
 
+	public void removeRottenFood(Food f) {
 		this.addRottenFood(f);
 		this.foodList.remove(f);
+	}
+	
+	public AnchorPane getAnchorPane() {
+		return this.anchorPane;
+	}
+	
+	private int getRandomNumber(int max) {
+		Random r = new Random();
+		int min = 10;
 
+		return r.nextInt(max - min) + min;
 	}
 }
