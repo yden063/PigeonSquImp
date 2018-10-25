@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.List;
 
 import controller.Square;
+import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -37,11 +38,12 @@ public class Pigeon extends Circle implements Runnable {
 		}
 	}
 
-	private synchronized void goToFood() {
+	private void goToFood() {
 		List<Food> foods = square.getFoodList();
 		Food f = findFood(foods);
 
 		if (f != null) {
+			System.out.println(this.name + "is moving");
 			moveTo(f);
 		}
 	}
@@ -71,27 +73,29 @@ public class Pigeon extends Circle implements Runnable {
 	}
 
 	private void moveTo(Food f) {
-		if (this.getCenterX() == f.getPoint().x && this.getCenterY() == f.getPoint().y) {
-			if (f.isFresh()) {
-				System.out.println("The " + this.name + " pigeon is eating!");
-				this.square.removeFood(f);
+		Platform.runLater(() -> {
+			if (this.getCenterX() == f.getPoint().x && this.getCenterY() == f.getPoint().y) {
+				if (f.isFresh()) {
+					System.out.println("The " + this.name + " pigeon is eating!");
+					this.square.removeFood(f);
+				} else {
+					// The food is rotten
+					this.square.removeRottenFood(f);
+					System.out.println("The pigeon doesn't like this food");
+				}
 			} else {
-				// The food is rotten
-				this.square.removeRottenFood(f);
-				System.out.println("The pigeon doesn't like this food");
+				if (this.getCenterX() < f.getPoint().x)
+					this.setCenterX(this.getCenterX() + 1);
+				
+				if (this.getCenterX() > f.getPoint().x)
+					this.setCenterX(this.getCenterX() - 1);
+				
+				if (this.getCenterY() < f.getPoint().y)
+					this.setCenterY(this.getCenterY() + 1);
+				
+				if (this.getCenterY() > f.getPoint().y)
+					this.setCenterY(this.getCenterY() - 1);
 			}
-		} else {
-			if (this.getCenterX() < f.getPoint().x)
-				this.setCenterX(this.getCenterX() + 1);
-
-			if (this.getCenterX() > f.getPoint().x)
-				this.setCenterX(this.getCenterX() - 1);
-
-			if (this.getCenterY() < f.getPoint().y)
-				this.setCenterY(this.getCenterY() + 1);
-
-			if (this.getCenterY() > f.getPoint().y)
-				this.setCenterY(this.getCenterY() - 1);
-		}
+		});
 	}
 }

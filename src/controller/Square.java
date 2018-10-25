@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
@@ -29,7 +30,6 @@ public class Square implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
 		// Initialize the frame
 		addPigeon(new Pigeon(100, 250, Color.BLUEVIOLET, this, "blueviolet"));
 		addPigeon(new Pigeon(400, 100, Color.BEIGE, this, "beige"));
@@ -39,12 +39,9 @@ public class Square implements Initializable {
 			new Thread(pigeon).start();
 		}
 		// anchorPane.getChildren().addAll(circle);
+		
 
 		handleSetOnMouseClicked();
-	}
-
-	public void run() {
-
 	}
 
 	public void addPigeon(Pigeon p) {
@@ -60,7 +57,10 @@ public class Square implements Initializable {
 
 	public void removeFood(Food f) {
 		// f.notify();
-		this.foodList.remove(f);
+		Platform.runLater(() -> {
+			anchorPane.getChildren().remove(f);
+			this.foodList.remove(f);	
+		});
 	}
 
 	public List<Pigeon> getPigeonList() {
@@ -84,7 +84,7 @@ public class Square implements Initializable {
 			Food food = new Food(dx.intValue(), dy.intValue());
 			addFood(food);
 
-			new Thread(food).start();
+			//new Thread(food).start();
 		});
 	}
 
