@@ -5,6 +5,7 @@ import java.util.List;
 
 import controller.Square;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 public class Pigeon implements Runnable {
 
@@ -12,11 +13,13 @@ public class Pigeon implements Runnable {
 	private boolean isAlive;
 	private Color color;
 	private Square square;
+	private Circle circle;
 
-	public Pigeon(int x, int y, Color color) {
+	public Pigeon(int x, int y, Color color, Square square) {
 		this.point = new Point(x, y);
 		this.isAlive = true;
 		this.color = color;
+		this.square = square;
 	}
 
 	@Override
@@ -30,7 +33,7 @@ public class Pigeon implements Runnable {
 		goToFood();
 
 		try {
-			Thread.sleep(50);
+			Thread.sleep(30);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -71,11 +74,12 @@ public class Pigeon implements Runnable {
 
 	private void moveTo(Food f) {
 		if (point.x == f.getPoint().x && point.y == f.getPoint().y) {
-			if(f.isFresh()) {
+			if (f.isFresh()) {
 				System.out.println("The " + this.color.toString() + " pigeon is eating!");
 				this.square.removeFood(f);
 			} else {
 				// The food is rotten
+				this.square.removeRottenFood(f);
 				System.out.println("The pigeon doesn't like this food");
 			}
 		} else {
@@ -92,13 +96,23 @@ public class Pigeon implements Runnable {
 				point.y--;
 		}
 
+		update();
 	}
-	
+
 	public Point getPoint() {
 		return this.point;
 	}
-	
+
 	public Color getColor() {
 		return this.color;
+	}
+
+	public void setCircle(Circle circle) {
+		this.circle = circle;
+	}
+
+	private void update() {
+		this.circle.setCenterX(this.point.x);
+		this.circle.setCenterY(this.point.y);
 	}
 }

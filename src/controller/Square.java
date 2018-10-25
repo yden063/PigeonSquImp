@@ -19,7 +19,6 @@ public class Square implements Initializable {
 	@FXML
 	private AnchorPane anchorPane;
 
-	private Circle circle;
 	private List<Pigeon> pigeonList;
 	private List<Food> foodList;
 	private List<Food> rottenFoodList;
@@ -34,10 +33,19 @@ public class Square implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		// Initialize the frame
-		addPigeon(new Pigeon(100, 250, Color.BLUEVIOLET));
-		addPigeon(new Pigeon(400, 100, Color.BEIGE));
-		addPigeon(new Pigeon(90, 400, Color.DARKSEAGREEN));
+		addPigeon(new Pigeon(100, 250, Color.BLUEVIOLET, this));
+		addPigeon(new Pigeon(400, 100, Color.BEIGE, this));
+		addPigeon(new Pigeon(90, 400, Color.DARKSEAGREEN, this));
 
+		for (Pigeon pigeon : pigeonList) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
+			new Thread(pigeon).start();
+		}
 		// anchorPane.getChildren().addAll(circle);
 
 		handleSetOnMouseClicked();
@@ -49,9 +57,11 @@ public class Square implements Initializable {
 
 	public void addPigeon(Pigeon p) {
 		Circle circle = new Circle(p.getPoint().x, p.getPoint().y, 10, p.getColor());
+		p.setCircle(circle);
 		anchorPane.getChildren().add(circle);
 
 		this.pigeonList.add(p);
+
 	}
 
 	public void addFood(Food f) {
@@ -62,7 +72,7 @@ public class Square implements Initializable {
 	}
 
 	public void removeFood(Food f) {
-		f.notify();
+		// f.notify();
 		this.foodList.remove(f);
 	}
 
@@ -87,6 +97,7 @@ public class Square implements Initializable {
 			Food food = new Food(dx.intValue(), dy.intValue());
 			addFood(food);
 
+			new Thread(food).start();
 		});
 	}
 

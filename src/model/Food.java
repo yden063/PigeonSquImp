@@ -23,13 +23,13 @@ public class Food implements Runnable {
 	public void run() {
 		fresh = true;
 
-		try {
+		/*try {
 			wait(5000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}
+		}*/
 
-		fresh = false;
+		//fresh = false;
 
 	}
 }
