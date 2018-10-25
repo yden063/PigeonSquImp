@@ -40,7 +40,7 @@ public class Pigeon extends Circle implements Runnable {
 		}
 
 		try {
-			if(affraid)
+			if (affraid)
 				Thread.sleep(8);
 			else
 				Thread.sleep(30);

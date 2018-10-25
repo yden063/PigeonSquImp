@@ -34,8 +34,7 @@ public class Food extends Rectangle implements Runnable {
 			e.printStackTrace();
 		}
 
-		 fresh = false;
-		 this.setFill(Color.RED);
-		 System.err.println("nourriture est "+ fresh);
+		fresh = false;
+		this.setFill(Color.RED);
 	}
 }

@@ -54,12 +54,11 @@ public class Square implements Initializable {
 	public void addFood(Food f) {
 		anchorPane.getChildren().add(f);
 		this.foodList.add(f);
-		
+
 		new Thread(f).start();
 	}
 
 	public void removeFood(Food f) {
-		//f.notify();
 		Platform.runLater(() -> {
 			anchorPane.getChildren().remove(f);
 			this.foodList.remove(f);
@@ -100,24 +99,24 @@ public class Square implements Initializable {
 
 	private void handleRightClick() {
 		// Disperse the pigeons
-		
+
 		for (Pigeon pigeon : pigeonList) {
 			int randomX = getRandomNumber((int) this.anchorPane.getWidth() - 10);
 			int randomY = getRandomNumber((int) this.getAnchorPane().getHeight() - 10);
 			pigeon.setAffraid(randomX, randomY);
 		}
-		
+
 	}
 
 	public void removeRottenFood(Food f) {
 		this.addRottenFood(f);
 		this.foodList.remove(f);
 	}
-	
+
 	public AnchorPane getAnchorPane() {
 		return this.anchorPane;
 	}
-	
+
 	private int getRandomNumber(int max) {
 		Random r = new Random();
 		int min = 10;
