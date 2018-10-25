@@ -5,7 +5,7 @@ import java.awt.Point;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class Food extends Rectangle {
+public class Food extends Rectangle implements Runnable {
 	private Point point;
 	private boolean fresh;
 
@@ -14,7 +14,6 @@ public class Food extends Rectangle {
 		this.setFill(Color.BLACK);
 		this.point = new Point(x, y);
 		this.fresh = true;
-
 	}
 
 	public Point getPoint() {
@@ -25,17 +24,18 @@ public class Food extends Rectangle {
 		return fresh;
 	}
 
-	/*@Override
+	@Override
 	public void run() {
 		fresh = true;
 
 		try {
-			wait(3000);
+			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
-		 //fresh = false;
+		 fresh = false;
+		 this.setFill(Color.RED);
 		 System.err.println("nourriture est "+ fresh);
-	}*/
+	}
 }

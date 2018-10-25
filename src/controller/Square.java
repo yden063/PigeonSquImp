@@ -54,10 +54,12 @@ public class Square implements Initializable {
 	public void addFood(Food f) {
 		anchorPane.getChildren().add(f);
 		this.foodList.add(f);
+		
+		new Thread(f).start();
 	}
 
 	public void removeFood(Food f) {
-		// f.notify();
+		//f.notify();
 		Platform.runLater(() -> {
 			anchorPane.getChildren().remove(f);
 			this.foodList.remove(f);
